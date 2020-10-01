@@ -5,13 +5,21 @@
   "main": "index.js",
   "scripts": {
     "debug": "node --inspect-brk node_modules/.bin/nightwatch",
-    "test": "nightwatch"
+    "defaulttest": "nightwatch",
+    "test:browserstack": "nightwatch -c nightwatch.bs.conf",
+    "test": "./node_modules/.bin/nightwatch -e chrome,firefox,edge,safari tests",
+    "parallel": "./node_modules/.bin/nightwatch -c nightwatch.conf.js -e chrome,firefox,safari,ie"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "chromedriver": "^85.0.1",
+    "geckodriver": "^1.20.0",
     "nightwatch": "^1.4.3"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "selenium-webdriver": "^4.0.0-alpha.7"
   }
 }
