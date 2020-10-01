@@ -1,6 +1,7 @@
 module.exports = 
 {
-    "src_folders" : ["tests"],
+    'src_folders' : ['tests'],
+    'page_objects_path': ['page-objects'],
   
     "webdriver" : {
       "start_process": true,
@@ -11,8 +12,17 @@ module.exports =
     "test_settings" : {
       "default" : {
         "desiredCapabilities": {
-          "browserName": "chrome"
+          "browserName": "chrome",
+          "chromeOptions": {
+            "prefs": {
+              "intl.accept_languages":"en-AU,en"
+            },
+            "args": [
+              "--incognito",
+              "window-size=1920,1080"
+            ]
         }
       }
     }
-  }  
+  }
+}
