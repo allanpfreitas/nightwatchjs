@@ -6,7 +6,7 @@
   "scripts": {
     "debug": "node --inspect-brk node_modules/.bin/nightwatch",
     "defaulttest": "nightwatch",
-    "test:browserstack": "nightwatch -c nightwatch.bs.conf",
+    "smoketests:browserstack": "nightwatch -g smoketests -c nightwatch.bs.conf -e chrome,firefox,safari,ie",
     "test": "./node_modules/.bin/nightwatch -e chrome,firefox,edge,safari tests",
     "parallel": "./node_modules/.bin/nightwatch -c nightwatch.conf.js -e chrome,firefox,safari,ie"
   },

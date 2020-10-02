@@ -1,33 +1,63 @@
-const baseConfig = require('./nightwatch.conf.js');
+require('dotenv').config();
 
-const config = {
-    ...baseConfig,
-    webdriver: {
-        'start_process': false,
-        'host': 'hub-cloud.browserstack.com',
-        'port': 80
+nightwatch_config = {
+    src_folders: ["tests"],
+
+    selenium: {
+        "start_process": false,
+        "host": "hub-cloud.browserstack.com",
+        "port": 80
     },
-};
-config.test_settings.default.desiredCapabilities['browserstack.user'] = process.env.BROWSERSTACK_USER;
-config.test_settings.default.desiredCapabilities['browserstack.key'] = process.env.BROWSERSTACK_KEY;
-config.test_settings.default.desiredCapabilities['build'] = 'nightwatch-aero';
-config.test_settings.default.desiredCapabilities.chromeOptions.args = [];
 
-config.test_settings.firefox = {
-    desiredCapabilities: {
-        os: 'Windows',
-        os_version: 'XP',
-        browserName: 'Firefox',
-        browser_version: '47.0',
-        ['browserstack.local']: false
+    common_capabilities: {
+        'build': 'nightwatch-aero',
+        'browserstack.user': process.env.BROWSERSTACK_USERNAME || 'BROWSERSTACK_USERNAME',
+        'browserstack.key': process.env.BROWSERSTACK_ACCESS_KEY || 'BROWSERSTACK_ACCESS_KEY',
+        'browserstack.debug': true
+    },
+
+    test_settings: {
+        default: {
+            launch_url: 'https://staging.aero.com/'
+        },
+        chrome: {
+            desiredCapabilities: {
+                browser: "chrome"
+            }
+        },
+        firefox: {
+            desiredCapabilities: {
+                browser: "firefox"
+            }
+        },
+        safari: {
+            desiredCapabilities: {
+                os: "OS X",
+                os_version: "Catalina",
+                browser: "safari",
+                browser_version: "13.0",
+            }
+        },
+        ie: {
+            desiredCapabilities: {
+                os: "Windows",
+                os_version: "10",
+                browserName: "IE",
+                browser_version: "11.0", 
+            }
+        }
     }
 };
 
-// Code to copy seleniumhost/port into test settings
-for (var i in config.test_settings) {
-    var test_setting = config.test_settings[i];
-    test_setting['selenium_host'] = config.webdriver.host;
-    test_setting['selenium_port'] = config.webdriver.port;
+// Code to support common capabilites
+for (var i in nightwatch_config.test_settings) {
+    var config = nightwatch_config.test_settings[i];
+    config['selenium_host'] = nightwatch_config.selenium.host;
+    config['selenium_port'] = nightwatch_config.selenium.port;
+    config['desiredCapabilities'] = config['desiredCapabilities'] || {};
+    for (var j in nightwatch_config.common_capabilities) {
+        config['desiredCapabilities'][j] = config['desiredCapabilities'][j] || nightwatch_config.common_capabilities[j];
+    }
 }
 
-module.exports = config;
+module.exports = nightwatch_config;
